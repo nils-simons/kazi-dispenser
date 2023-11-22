@@ -47,4 +47,4 @@ function rotateStepper(degrees) {
 }
 
 // Example: Rotate the stepper motor 90 degrees
-rotateStepper(90);
+rotateStepper(180);
