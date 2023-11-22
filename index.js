@@ -5,7 +5,7 @@ var stepPins = [17, 27, 22, 23];
 var pins = [];
 var stepCounter = 0;
 var timeout = 0.01;
-var stepCount = 8;
+var stepsPerRevolution = 4096; // Steps per one revolution (adjust according to your motor specifications)
 
 Seq = [];
 Seq[0] = [1, 0, 0, 0];
@@ -22,7 +22,7 @@ for (var i = 0; i < stepPins.length; i++) {
 }
 
 function rotateStepper(degrees) {
-  var steps = Math.floor((stepCount / 360) * degrees);
+  var steps = Math.floor((stepsPerRevolution / 360) * degrees);
 
   function step() {
     for (var pin = 0; pin < 4; pin++) {
@@ -33,11 +33,8 @@ function rotateStepper(degrees) {
       }
     }
     stepCounter += 1;
-    if (stepCounter === stepCount) {
+    if (stepCounter === 8) {
       stepCounter = 0;
-    }
-    if (stepCounter < 0) {
-      stepCounter = stepCount - 1;
     }
 
     if (steps > 0) {
