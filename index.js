@@ -1,1 +1,1 @@
-require('/gpio').rotateStepper(180)
+require('./gpio').rotateStepper(180)
