@@ -1,40 +1,48 @@
-const rpio = require('rpio');
+const Gpio = require('pigpio').Gpio;
 
-// GPIO pin configuration
-const stepPin = 12; // GPIO pin for stepping
-const directionPin = 11; // GPIO pin for direction
+// Define GPIO pins for the stepper motor
+const IN1 = new Gpio(17, { mode: Gpio.OUTPUT });
+const IN2 = new Gpio(27, { mode: Gpio.OUTPUT });
+const IN3 = new Gpio(22, { mode: Gpio.OUTPUT });
+const IN4 = new Gpio(23, { mode: Gpio.OUTPUT });
 
-// Stepper motor configuration
-const stepsPerRevolution = 200;
+// Define the sequence of steps for the stepper motor
+const sequence = [
+  [1, 0, 0, 1],
+  [1, 0, 0, 0],
+  [1, 1, 0, 0],
+  [0, 1, 0, 0],
+  [0, 1, 1, 0],
+  [0, 0, 1, 0],
+  [0, 0, 1, 1],
+  [0, 0, 0, 1]
+];
 
-// Set up GPIO pins
-rpio.open(stepPin, rpio.OUTPUT, rpio.LOW);
-rpio.open(directionPin, rpio.OUTPUT, rpio.LOW);
+let stepCounter = 0;
 
-// Move the stepper motor
-function moveStepper() {
-  const rpm = 5; // Set the speed in revolutions per minute
-
-  // Set the direction (1 for clockwise, 0 for counterclockwise)
-  rpio.write(directionPin, rpio.HIGH);
-
-  // Calculate delay based on RPM
-  const delay = Math.floor((60 * 1000) / (stepsPerRevolution * rpm));
-
-  // Rotate 360 degrees (1 revolution)
-  for (let step = 0; step < stepsPerRevolution; step++) {
-    rpio.write(stepPin, rpio.HIGH);
-    rpio.msleep(delay);
-    rpio.write(stepPin, rpio.LOW);
-    rpio.msleep(delay);
-  }
-
-  console.log('Stepper motor moved 360 degrees');
+function setStep(step) {
+  IN1.digitalWrite(sequence[step][0]);
+  IN2.digitalWrite(sequence[step][1]);
+  IN3.digitalWrite(sequence[step][2]);
+  IN4.digitalWrite(sequence[step][3]);
 }
 
-// Call the function to move the stepper motor
-moveStepper();
+function rotateStepper(degrees, delay) {
+  const steps = Math.floor((512 / 360) * degrees); // Adjust the steps per degree as needed
 
-// Close GPIO pins when done
-rpio.close(stepPin);
-rpio.close(directionPin);
+  for (let i = 0; i < steps; i++) {
+    setStep(stepCounter % 8);
+    stepCounter++;
+    if (stepCounter === 8) {
+      stepCounter = 0;
+    }
+    sleep(delay);
+  }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Example: Rotate the stepper motor 90 degrees with a delay of 5 milliseconds between steps
+rotateStepper(90, 5);
