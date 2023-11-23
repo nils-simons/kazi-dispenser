@@ -1,6 +1,7 @@
 var gpio = require("onoff").Gpio;
+var gpioConf = require('./configs/gpio.json');
 
-var stepPins = [17, 27, 22, 23];
+// var stepPins = [17, 27, 22, 23];
 var pins = [];
 var stepCounter = 0;
 var timeout = 0.01;
@@ -16,8 +17,8 @@ Seq[5] = [0, 0, 1, 1];
 Seq[6] = [0, 0, 0, 1];
 Seq[7] = [1, 0, 0, 1];
 
-for (var i = 0; i < stepPins.length; i++) {
-  pins[i] = new gpio(stepPins[i], 'out');
+for (var i = 0; i < gpioConf.STEPPER.out.length; i++) {
+  pins[i] = new gpio(gpioConf.STEPPER.out[i], 'out');
 }
 
 function rotateStepper(degrees=180) {
