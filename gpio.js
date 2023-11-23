@@ -21,28 +21,31 @@ for (var i = 0; i < stepPins.length; i++) {
 }
 
 function rotateStepper(degrees=180) {
-  var steps = Math.floor((stepsPerRevolution / 360) * degrees);
-
-  function step() {
-    for (var pin = 0; pin < 4; pin++) {
-      if (Seq[stepCounter][pin] !== 0) {
-        pins[pin].writeSync(1);
-      } else {
-        pins[pin].writeSync(0);
+  return new Promise(function(resolve, reject) {
+    var steps = Math.floor((stepsPerRevolution / 360) * degrees);
+    function step() {
+      for (var pin = 0; pin < 4; pin++) {
+        if (Seq[stepCounter][pin] !== 0) {
+          pins[pin].writeSync(1);
+        } else {
+          pins[pin].writeSync(0);
+        }
+      }
+      stepCounter += 1;
+      if (stepCounter === 8) {
+        stepCounter = 0;
+      }
+  
+      if (steps > 0) {
+        steps--;
+        setTimeout(step, timeout);
       }
     }
-    stepCounter += 1;
-    if (stepCounter === 8) {
-      stepCounter = 0;
-    }
+  
+    step();
+    resolve(true);
+  })
 
-    if (steps > 0) {
-      steps--;
-      setTimeout(step, timeout);
-    }
-  }
-
-  step();
 }
 
 exports.rotateStepper = rotateStepper;
