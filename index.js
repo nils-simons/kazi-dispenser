@@ -34,8 +34,9 @@ ref.on('value', async (snap) => {
   if (data == 0) { return }
   
   for (let i = 0; i < parseInt(data); i++) {
-    // await gpio.rotateStepper(180)
-    console.log('Dispensing!')
+    console.log('>>>> start dispensing')
+    await gpio.rotateStepper(180)
+    console.log('>>>> end dispensing')
   }
 
   db.ref(`/${serverConfig.DISPENSER_ID}`).update({dispense: 0});
