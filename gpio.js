@@ -39,11 +39,12 @@ function rotateStepper(degrees=180) {
       if (steps > 0) {
         steps--;
         setTimeout(step, timeout);
+      } else {
+        resolve(true);
       }
     }
-  
+      
     step();
-    resolve(true);
   })
 
 }
