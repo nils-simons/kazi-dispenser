@@ -1,5 +1,5 @@
 const serverConfig = require('../configs/server.json');
-const gpio = require('./gpio');
+const gpio = require('../gpio');
 
 const db = admin.database();
 
