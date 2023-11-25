@@ -1,3 +1,5 @@
+const admin = require('firebase-admin');
+
 const serverConfig = require('../configs/server.json');
 const gpio = require('../gpio');
 
