@@ -34,6 +34,7 @@ try {
 }
 
 
+console.log('DEV: '+DEV);
 
 function rotateStepper(degrees=180) {
   return new Promise(async (resolve, reject) => {
