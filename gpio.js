@@ -1,4 +1,11 @@
-var gpio = require("onoff").Gpio;
+let DEV = false;
+try {
+  const gpio = require("onoff").Gpio;
+  DEV = false;
+} catch (error) {
+  DEV = true;
+}
+
 var gpioConf = require('./configs/gpio.json');
 
 var pins = [];
@@ -16,12 +23,29 @@ Seq[5] = [0, 0, 1, 1];
 Seq[6] = [0, 0, 0, 1];
 Seq[7] = [1, 0, 0, 1];
 
-for (var i = 0; i < gpioConf.STEPPER.out.length; i++) {
-  pins[i] = new gpio(gpioConf.STEPPER.out[i], 'out');
+
+try {
+  for (var i = 0; i < gpioConf.STEPPER.out.length; i++) {
+    pins[i] = new gpio(gpioConf.STEPPER.out[i], 'out');
+  }
+  DEV = false;
+} catch (error) {
+  DEV = true;
 }
 
+
+
 function rotateStepper(degrees=180) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(async (resolve, reject) => {
+
+
+    if (DEV) {
+      console.log('Simulating...');
+      await new Promise(r => setTimeout(r, 1000));
+      resolve(true)
+      return
+    }
+
     var steps = Math.floor((stepsPerRevolution / 360) * degrees);
     function step() {
       for (var pin = 0; pin < 4; pin++) {
