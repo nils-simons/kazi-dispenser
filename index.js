@@ -2,9 +2,6 @@ const admin = require('firebase-admin');
 
 const serviceAccount = require("./configs/firebase-cert.json");
 
-const os = require("os");
-const hostName = os.hostname();
-console.log(hostName);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

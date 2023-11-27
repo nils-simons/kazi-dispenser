@@ -1,14 +1,14 @@
 let DEV = false;
 
+const os = require("os");
+const gpio = require("onoff").Gpio;
 
-try {
-  const gpio = require("onoff").Gpio;
-  DEV = false;
-} catch (error) {
+
+const hostName = os.hostname();
+
+if (hostName !== 'kazi') {
   DEV = true;
 }
-
-gpio.accessible
 
 var gpioConf = require('./configs/gpio.json');
 
@@ -28,14 +28,12 @@ Seq[6] = [0, 0, 0, 1];
 Seq[7] = [1, 0, 0, 1];
 
 
-try {
+if (!DEV) {
   for (var i = 0; i < gpioConf.STEPPER.out.length; i++) {
     pins[i] = new gpio(gpioConf.STEPPER.out[i], 'out');
   }
-  DEV = false;
-} catch (error) {
-  DEV = true;
 }
+
 
 
 console.log('DEV: '+DEV);
