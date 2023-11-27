@@ -1,10 +1,14 @@
 let DEV = false;
+
+
 try {
   const gpio = require("onoff").Gpio;
   DEV = false;
 } catch (error) {
   DEV = true;
 }
+
+gpio.accessible
 
 var gpioConf = require('./configs/gpio.json');
 
