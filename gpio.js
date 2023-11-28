@@ -8,6 +8,9 @@ if (hostName !== 'kazi') {
   DEV = true;
 }
 
+logger.log('system', `DEVELOPMENT: ${DEV}`)
+
+
 
 if (!DEV) {
   const gpio = require("onoff").Gpio;
@@ -37,10 +40,6 @@ if (!DEV) {
     pins[i] = new gpio(gpioConf.STEPPER.out[i], 'out');
   }
 }
-
-
-logger.log('system', `DEVELOPMENT: ${DEV}`)
-
 
 function rotateStepper(degrees=180) {
   return new Promise(async (resolve, reject) => {
