@@ -1,8 +1,6 @@
 let DEV = false;
 
 const os = require("os");
-const gpio = require("onoff").Gpio;
-
 
 const hostName = os.hostname();
 
@@ -10,7 +8,13 @@ if (hostName !== 'kazi') {
   DEV = true;
 }
 
+
+if (!DEV) {
+  const gpio = require("onoff").Gpio;
+}
+
 var gpioConf = require('./configs/gpio.json');
+var logger = require('./utils/logger');
 
 var pins = [];
 var stepCounter = 0;
@@ -35,20 +39,21 @@ if (!DEV) {
 }
 
 
+logger.log('system', `DEVELOPMENT: ${DEV}`)
 
-console.log('DEV: '+DEV);
 
 function rotateStepper(degrees=180) {
   return new Promise(async (resolve, reject) => {
 
 
     if (DEV) {
-      console.log('Simulating...');
+      logger.log('success', `Rotating ${degrees}° (Simulation)`)
       await new Promise(r => setTimeout(r, 1000));
       resolve(true)
       return
     }
 
+    logger.log('success', `Rotating ${degrees}°`)
     var steps = Math.floor((stepsPerRevolution / 360) * degrees);
     function step() {
       for (var pin = 0; pin < 4; pin++) {

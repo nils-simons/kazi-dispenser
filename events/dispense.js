@@ -2,6 +2,7 @@ const admin = require('firebase-admin');
 
 const serverConfig = require('../configs/server.json');
 const gpio = require('../gpio');
+const logger = require('../utils/logger')
 
 const db = admin.database();
 
@@ -12,9 +13,9 @@ ref.on('value', async (snap) => {
   if (data == 0) { return }
   
   for (let i = 0; i < parseInt(data); i++) {
-    console.log('>>>> start dispensing')
+    logger.log('info', 'Start dispensing...')
     await gpio.rotateStepper(180)
-    console.log('>>>> end dispensing')
+    logger.log('info', 'Stop dispensing...')
     await new Promise(r => setTimeout(r, 1000));
   }
 
