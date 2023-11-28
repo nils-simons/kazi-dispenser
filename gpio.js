@@ -1,6 +1,7 @@
 let DEV = false;
 
 const os = require("os");
+var logger = require('./utils/logger');
 
 const hostName = os.hostname();
 
@@ -17,7 +18,6 @@ if (!DEV) {
 }
 
 var gpioConf = require('./configs/gpio.json');
-var logger = require('./utils/logger');
 
 var pins = [];
 var stepCounter = 0;
