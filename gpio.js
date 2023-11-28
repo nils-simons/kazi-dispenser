@@ -12,9 +12,9 @@ if (hostName !== 'kazi') {
 logger.log('system', `DEVELOPMENT: ${DEV}`)
 
 
-
+let gpio
 if (!DEV) {
-  const gpio = require("onoff").Gpio;
+  gpio = require("onoff").Gpio;
 }
 
 var gpioConf = require('./configs/gpio.json');
